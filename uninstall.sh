@@ -39,6 +39,12 @@ fi
 remove_bin "${HOME}/.local/bin"
 remove_bin "/usr/local/bin"
 
+app="${HOME}/Applications/Singlet.app"
+if [ -d "$app" ]; then
+  info "removing $app"
+  rm -rf "$app"
+fi
+
 if [ "${SINGLET_PURGE:-}" = "1" ]; then
   if [ -d "${HOME}/.singlet" ]; then
     info "removing ${HOME}/.singlet"

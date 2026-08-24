@@ -114,9 +114,44 @@ if [ "${SINGLET_NO_SERVICE:-}" = "1" ]; then
   exit 0
 fi
 
+# A naked CLI cannot prompt for Local Network on modern macOS, so iroh
+# mDNS (and sometimes the relay) is silently blocked. Put the binary
+# inside an .app so TCC can ask.
+app="${HOME}/Applications/Singlet.app"
+mkdir -p "$app/Contents/MacOS"
+cp "$bindir/singletd" "$app/Contents/MacOS/singletd"
+chmod 755 "$app/Contents/MacOS/singletd"
+cat > "$app/Contents/Info.plist" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleIdentifier</key>
+  <string>${LABEL}</string>
+  <key>CFBundleName</key>
+  <string>Singlet</string>
+  <key>CFBundleExecutable</key>
+  <string>singletd</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>LSUIElement</key>
+  <true/>
+  <key>NSLocalNetworkUsageDescription</key>
+  <string>Singlet finds the other half of the pair on your network.</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Singlet carries the voice line between the two keys.</string>
+  <key>NSBonjourServices</key>
+  <array>
+    <string>_irohv1._udp</string>
+  </array>
+</dict>
+</plist>
+EOF
+
 plist="${HOME}/Library/LaunchAgents/${LABEL}.plist"
 mkdir -p "${HOME}/Library/LaunchAgents"
 uid=$(id -u)
+daemon_bin="$app/Contents/MacOS/singletd"
 
 cat > "$plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -127,7 +162,7 @@ cat > "$plist" <<EOF
   <string>${LABEL}</string>
   <key>ProgramArguments</key>
   <array>
-    <string>${bindir}/singletd</string>
+    <string>${daemon_bin}</string>
     <string>run</string>
   </array>
   <key>RunAtLoad</key>
@@ -169,8 +204,9 @@ fi
 
 cat <<EOF
 
-Plug a singlet into USB if you have not already. macOS may ask for
-microphone access — allow it.
+Plug a singlet into USB if you have not already. Allow microphone
+and Local Network when macOS asks — without Local Network the two
+halves cannot find each other on the LAN.
 
   logs:   ${statedir}/singletd.log
   stop:   launchctl bootout gui/\$(id -u) ~/Library/LaunchAgents/${LABEL}.plist
