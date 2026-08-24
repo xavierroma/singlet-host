@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>singlet</title>
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      font: 16px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: #0b0b0c;
+      color: #e8e4dc;
+    }
+    main { max-width: 42rem; padding: 2.5rem 1.5rem; }
+    h1 { font-size: 1rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9aa08c; }
+    p { margin: 1rem 0; color: #c9c4b8; }
+    pre {
+      margin: 1.25rem 0;
+      padding: 1rem 1.1rem;
+      overflow-x: auto;
+      background: #161618;
+      border: 1px solid #2a2a2e;
+      border-radius: 6px;
+      color: #f4efe4;
+    }
+    code { font: inherit; }
+    .muted { color: #7d7a72; font-size: 0.9rem; }
+    a { color: #d7c49a; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>singlet</h1>
+    <p>Install the host daemon on a Mac. Identity stays in the key.</p>
+    <pre><code>curl -fsSL https://singlet.xroma.dev/install.sh | sh</code></pre>
+    <p class="muted">macOS Apple Silicon. Then plug in a singlet and run <code>singletd run</code>.</p>
+  </main>
+</body>
+</html>
