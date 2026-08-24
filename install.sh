@@ -8,6 +8,8 @@
 set -eu
 
 BASE="${SINGLET_URL:-https://singlet.xroma.dev}"
+# Prebuilt binaries (gzipped). Override to test a preview.
+BIN="${SINGLET_BIN_URL:-https://github.com/xavierroma/singlet-host/releases/latest/download}"
 VERSION="${SINGLET_VERSION:-latest}"
 
 info()  { printf '==> %s\n' "$*"; }
@@ -53,9 +55,9 @@ fetch() {
   fi
 }
 
-fetch "${BASE}/${triple}/SHA256SUMS" "$tmp/SHA256SUMS"
-fetch "${BASE}/${triple}/singletd.gz" "$tmp/singletd.gz"
-fetch "${BASE}/${triple}/singlet-tui.gz" "$tmp/singlet-tui.gz"
+fetch "${BIN}/SHA256SUMS" "$tmp/SHA256SUMS"
+fetch "${BIN}/singletd.gz" "$tmp/singletd.gz"
+fetch "${BIN}/singlet-tui.gz" "$tmp/singlet-tui.gz"
 gunzip -f "$tmp/singletd.gz" "$tmp/singlet-tui.gz"
 
 info "verifying checksums"
