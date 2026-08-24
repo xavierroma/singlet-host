@@ -60,8 +60,7 @@ fetch() {
 
 fetch "${BIN}/SHA256SUMS" "$tmp/SHA256SUMS"
 fetch "${BIN}/singletd.gz" "$tmp/singletd.gz"
-fetch "${BIN}/singlet-tui.gz" "$tmp/singlet-tui.gz"
-gunzip -f "$tmp/singletd.gz" "$tmp/singlet-tui.gz"
+gunzip -f "$tmp/singletd.gz"
 
 info "verifying checksums"
 (
@@ -75,15 +74,13 @@ info "verifying checksums"
   fi
 )
 
-chmod 755 "$tmp/singletd" "$tmp/singlet-tui"
+chmod 755 "$tmp/singletd"
 if command -v codesign >/dev/null 2>&1; then
   codesign --sign - --force "$tmp/singletd" >/dev/null 2>&1 || true
-  codesign --sign - --force "$tmp/singlet-tui" >/dev/null 2>&1 || true
 fi
 xattr -d com.apple.quarantine "$tmp/singletd" 2>/dev/null || true
-xattr -d com.apple.quarantine "$tmp/singlet-tui" 2>/dev/null || true
 mv -f "$tmp/singletd" "$bindir/singletd"
-mv -f "$tmp/singlet-tui" "$bindir/singlet-tui"
+rm -f "$bindir/singlet-tui"
 
 # Keep a local copy of uninstall so it still works if the site is down.
 fetch "${BIN}/uninstall.sh" "$tmp/uninstall.sh" || \
@@ -101,7 +98,7 @@ case ":$PATH:" in
 esac
 
 info "installed"
-printf '    %s\n    %s\n' "$bindir/singletd" "$bindir/singlet-tui"
+printf '    %s\n' "$bindir/singletd"
 
 if [ "$in_path" -eq 0 ]; then
   warn "$bindir is not on PATH. Add this to your shell rc:"
@@ -204,9 +201,10 @@ fi
 
 cat <<EOF
 
-Plug a singlet into USB if you have not already. Allow microphone
-and Local Network when macOS asks — without Local Network the two
-halves cannot find each other on the LAN.
+Plug a singlet into USB if you have not already. Allow Local
+Network when macOS asks — without it the two halves cannot find
+each other on the LAN. The microphone is used only during a call;
+macOS will ask the first time you pick up.
 
   logs:   ${statedir}/singletd.log
   stop:   launchctl bootout gui/\$(id -u) ~/Library/LaunchAgents/${LABEL}.plist
