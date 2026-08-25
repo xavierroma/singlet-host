@@ -83,9 +83,8 @@ mv -f "$tmp/singletd" "$bindir/singletd"
 rm -f "$bindir/singlet-tui"
 
 # Keep a local copy of uninstall so it still works if the site is down.
-fetch "${BIN}/uninstall.sh" "$tmp/uninstall.sh" || \
-  fetch "https://xavierroma.github.io/singlet-host/uninstall.sh" "$tmp/uninstall.sh" || \
-  fetch "${BASE}/uninstall.sh" "$tmp/uninstall.sh" || true
+fetch "${BASE}/uninstall.sh" "$tmp/uninstall.sh" || \
+  fetch "${BIN}/uninstall.sh" "$tmp/uninstall.sh" || true
 if [ -f "$tmp/uninstall.sh" ]; then
   chmod 755 "$tmp/uninstall.sh"
   xattr -d com.apple.quarantine "$tmp/uninstall.sh" 2>/dev/null || true

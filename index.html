@@ -50,7 +50,8 @@
     }
     .cmd {
       display: flex;
-      align-items: start;
+      flex-wrap: nowrap;
+      align-items: center;
       gap: 8px;
       padding: 8px;
       border-radius: 14px;
@@ -63,22 +64,21 @@
     }
     .cmd:hover { box-shadow: 0 0 0 1px var(--ring-hover); }
     .cmd pre {
-      flex: 1;
+      flex: 1 1 auto;
       min-width: 0;
       margin: 0;
       padding: 0.65rem 0.7rem;
       color: var(--code);
+      overflow-x: auto;
     }
     .cmd code {
       font: inherit;
       user-select: all;
       -webkit-user-select: all;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
+      white-space: nowrap;
     }
     .copy {
       flex: none;
-      align-self: start;
       min-width: 5.5rem;
       min-height: 2.5rem;
       padding: 0 0.85rem;
@@ -112,13 +112,6 @@
       clip: rect(0 0 0 0);
       white-space: nowrap;
     }
-    @media (max-width: 32rem) {
-      .cmd { flex-wrap: wrap; }
-      .copy {
-        width: 100%;
-        min-height: 2.75rem;
-      }
-    }
   </style>
 </head>
 <body>
@@ -128,7 +121,7 @@
     <section class="block" aria-labelledby="install-label">
       <h2 id="install-label">Install</h2>
       <div class="cmd">
-        <pre><code id="install-cmd">curl -fsSL https://xavierroma.github.io/singlet-host/install.sh | sh</code></pre>
+        <pre><code id="install-cmd">curl -fsSL https://singlet.xroma.dev/install.sh | sh</code></pre>
         <button type="button" class="copy" data-copy="install-cmd" aria-label="Copy install command">Copy</button>
       </div>
     </section>
@@ -136,7 +129,7 @@
     <section class="block" aria-labelledby="uninstall-label">
       <h2 id="uninstall-label">Uninstall</h2>
       <div class="cmd">
-        <pre><code id="uninstall-cmd">curl -fsSL https://xavierroma.github.io/singlet-host/uninstall.sh | sh</code></pre>
+        <pre><code id="uninstall-cmd">curl -fsSL https://singlet.xroma.dev/uninstall.sh | sh</code></pre>
         <button type="button" class="copy" data-copy="uninstall-cmd" aria-label="Copy uninstall command">Copy</button>
       </div>
     </section>
@@ -145,22 +138,6 @@
   </main>
   <script>
     (function () {
-      function pageBase() {
-        if (location.protocol !== "http:" && location.protocol !== "https:") {
-          return "https://xavierroma.github.io/singlet-host";
-        }
-        var path = location.pathname.replace(/index\.html$/i, "");
-        if (!path.endsWith("/")) path += "/";
-        path = path.replace(/\/$/, "");
-        return location.origin + path;
-      }
-
-      var base = pageBase();
-      var install = document.getElementById("install-cmd");
-      var uninstall = document.getElementById("uninstall-cmd");
-      if (install) install.textContent = "curl -fsSL " + base + "/install.sh | sh";
-      if (uninstall) uninstall.textContent = "curl -fsSL " + base + "/uninstall.sh | sh";
-
       var status = document.querySelector(".status");
       var resetTimer;
 
