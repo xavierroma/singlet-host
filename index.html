@@ -172,17 +172,34 @@
         50% { opacity: 1; }
       }
       @keyframes led-busy {
-        0%, 8%, 22%, 30%, 44%, 100% { opacity: 0; }
+        0%, 8%, 22%, 30%, 44%, 100% { opacity: 0.18; }
         12%, 18%, 34%, 40% { opacity: 1; }
       }
       @keyframes led-missed {
-        0%, 20%, 100% { opacity: 0; }
+        0%, 20%, 100% { opacity: 0.18; }
         6%, 12% { opacity: 1; }
       }
     }
     @media (prefers-reduced-motion: reduce) {
       .led-dial, .led-breathe { opacity: 0.6; }
       .led-busy, .led-missed { opacity: 0.35; }
+    }
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+      font-size: 0.8rem;
+    }
+    .flow + .flow { box-shadow: 0 -1px 0 var(--ring); }
+    .flow .term { color: var(--code); min-width: 4.6rem; }
+    .flow .arr {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--muted);
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -267,6 +284,62 @@
           <span class="ico" aria-hidden="true"><span class="led led-missed"></span></span>
           <span class="term">flash → dark</span>
           <span class="what">missed call</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="flows-label">
+      <h2 id="flows-label">Flows</h2>
+      <div class="legend">
+        <div class="flow">
+          <span class="term">call</span>
+          <span class="led led-glow"></span>
+          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
+          <span class="led led-dial"></span>
+          <span class="arr">answered →</span>
+          <span class="led led-breathe"></span>
+        </div>
+        <div class="flow">
+          <span class="term">answer</span>
+          <span class="led led-ring"></span>
+          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
+          <span class="led led-breathe"></span>
+        </div>
+        <div class="flow">
+          <span class="term">hang up</span>
+          <span class="led led-breathe"></span>
+          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press twice"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
+          <span class="led led-glow"></span>
+        </div>
+        <div class="flow">
+          <span class="term">cancel</span>
+          <span class="led led-dial"></span>
+          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press twice"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
+          <span class="led led-glow"></span>
+        </div>
+        <div class="flow">
+          <span class="term">mute</span>
+          <span class="led led-breathe"></span>
+          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
+          <span class="led led-muted"></span>
+          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
+          <span class="led led-breathe"></span>
+        </div>
+        <div class="flow">
+          <span class="term">busy</span>
+          <span class="led led-dial"></span>
+          <span class="arr">peer busy →</span>
+          <span class="led led-busy"></span>
+          <span class="arr">→</span>
+          <span class="led led-glow"></span>
+        </div>
+        <div class="flow">
+          <span class="term">missed</span>
+          <span class="led led-ring"></span>
+          <span class="arr">no answer →</span>
+          <span class="led led-missed"></span>
+          <span class="arr">→</span>
+          <span class="led led-glow"></span>
         </div>
       </div>
     </section>
