@@ -1,5 +1,6 @@
 #!/bin/sh
 # singlet — stop the background daemon and remove the install
+# Always deletes ~/.singlet (Host logs). Identity lives in the Singlet.
 # Usage:
 #   curl -fsSL https://singlet.xroma.dev/uninstall.sh | sh
 set -eu
@@ -7,7 +8,6 @@ set -eu
 LABEL="dev.singlet.singletd"
 
 info() { printf '==> %s\n' "$*"; }
-warn() { printf 'warn: %s\n' "$*" >&2; }
 
 uid=$(id -u)
 plist="${HOME}/Library/LaunchAgents/${LABEL}.plist"
@@ -45,13 +45,9 @@ if [ -d "$app" ]; then
   rm -rf "$app"
 fi
 
-if [ "${SINGLET_PURGE:-}" = "1" ]; then
-  if [ -d "${HOME}/.singlet" ]; then
-    info "removing ${HOME}/.singlet"
-    rm -rf "${HOME}/.singlet"
-  fi
-else
-  info "left ${HOME}/.singlet (logs). Purge with SINGLET_PURGE=1"
+if [ -d "${HOME}/.singlet" ]; then
+  info "removing ${HOME}/.singlet"
+  rm -rf "${HOME}/.singlet"
 fi
 
 info "uninstalled"
