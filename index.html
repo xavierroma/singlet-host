@@ -22,12 +22,17 @@
       min-height: 100dvh;
       display: grid;
       place-items: center;
+      /* Size the track, not the item: a %-width on the item is cyclic in
+         a content-sized grid track and falls back to max-content, which
+         overflows small screens. */
+      grid-template-columns: min(42rem, calc(100% - 2rem));
+      justify-content: center;
       font: 16px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
       background: var(--bg);
       color: var(--ink);
     }
     main {
-      width: min(42rem, calc(100% - 2rem));
+      width: 100%;
       padding: 2.5rem 0;
     }
     h1 {
@@ -121,13 +126,40 @@
     }
     .row {
       display: grid;
-      grid-template-columns: 2.4rem 8.75rem 1fr;
+      grid-template-columns: 2.4rem 8.75rem minmax(0, 1fr) auto;
       align-items: center;
       gap: 0.6rem;
       padding: 0.45rem 0;
     }
+    .row.gesture { grid-template-columns: 2.4rem 8.75rem minmax(0, 1fr); }
+    .acts {
+      display: grid;
+      gap: 0.3rem;
+      justify-self: end;
+      justify-items: end;
+      color: var(--muted);
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .acts .act {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .acts .led { width: 10px; height: 10px; }
+    .acts .key { flex: none; }
+    @media (max-width: 36rem) {
+      .row { grid-template-columns: 2.4rem 8.75rem minmax(0, 1fr); }
+      .acts { grid-column: 2 / -1; justify-self: start; justify-items: start; }
+    }
     .row + .row { box-shadow: 0 -1px 0 var(--ring); }
     .row .ico { display: grid; place-items: center; }
+    .row .ico-double {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
     .row .term { color: var(--code); }
     .row .what { color: var(--muted); }
     .key { display: block; }
@@ -184,23 +216,6 @@
       .led-dial, .led-breathe { opacity: 0.6; }
       .led-busy, .led-missed { opacity: 0.35; }
     }
-    .flow {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 0;
-      font-size: 0.8rem;
-    }
-    .flow + .flow { box-shadow: 0 -1px 0 var(--ring); }
-    .flow .term { color: var(--code); min-width: 4.6rem; }
-    .flow .arr {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      color: var(--muted);
-      white-space: nowrap;
-    }
   </style>
 </head>
 <body>
@@ -229,11 +244,14 @@
           <span class="what">glow → call &nbsp;·&nbsp; ring → answer &nbsp;·&nbsp; in call → mute</span>
         </div>
         <div class="row">
-          <span class="ico" aria-hidden="true">
-            <svg class="key" width="24" height="24" viewBox="0 0 24 24">
+          <span class="ico ico-double" aria-hidden="true">
+            <svg class="key" width="17" height="17" viewBox="0 0 24 24">
               <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-              <circle cx="8.5" cy="12" r="2.6"></circle>
-              <circle cx="15.5" cy="12" r="2.6"></circle>
+              <circle cx="12" cy="12" r="2.6"></circle>
+            </svg>
+            <svg class="key" width="17" height="17" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+              <circle cx="12" cy="12" r="2.6"></circle>
             </svg>
           </span>
           <span class="term">press ×2</span>
@@ -253,27 +271,32 @@
         <div class="row">
           <span class="ico" aria-hidden="true"><span class="led led-glow"></span></span>
           <span class="term">glow</span>
-          <span class="what">peer free — press to call</span>
+          <span class="what">peer free</span>
+          <span class="acts"><span class="act"><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> call → <span class="led led-dial"></span></span></span>
         </div>
         <div class="row">
           <span class="ico" aria-hidden="true"><span class="led led-dial"></span></span>
           <span class="term">slow pulse</span>
           <span class="what">dialing…</span>
+          <span class="acts"><span class="act"><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> cancel → <span class="led led-glow"></span></span></span>
         </div>
         <div class="row">
           <span class="ico" aria-hidden="true"><span class="led led-ring"></span></span>
           <span class="term">fast blink</span>
-          <span class="what">peer calling — press to answer</span>
+          <span class="what">peer calling</span>
+          <span class="acts"><span class="act"><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> answer → <span class="led led-breathe"></span></span><span class="act"><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> decline → <span class="led led-glow"></span></span></span>
         </div>
         <div class="row">
           <span class="ico" aria-hidden="true"><span class="led led-breathe"></span></span>
           <span class="term">breathing</span>
           <span class="what">voice line live</span>
+          <span class="acts"><span class="act"><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> mute → <span class="led led-muted"></span></span><span class="act"><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> hang up → <span class="led led-glow"></span></span></span>
         </div>
         <div class="row">
           <span class="ico" aria-hidden="true"><span class="led led-muted"></span></span>
           <span class="term">dim red</span>
           <span class="what">muted</span>
+          <span class="acts"><span class="act"><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> unmute → <span class="led led-breathe"></span></span><span class="act"><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg><svg class="key" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> hang up → <span class="led led-glow"></span></span></span>
         </div>
         <div class="row">
           <span class="ico" aria-hidden="true"><span class="led led-busy"></span></span>
@@ -284,62 +307,6 @@
           <span class="ico" aria-hidden="true"><span class="led led-missed"></span></span>
           <span class="term">flash → dark</span>
           <span class="what">missed call</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="block" aria-labelledby="flows-label">
-      <h2 id="flows-label">Flows</h2>
-      <div class="legend">
-        <div class="flow">
-          <span class="term">call</span>
-          <span class="led led-glow"></span>
-          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
-          <span class="led led-dial"></span>
-          <span class="arr">answered →</span>
-          <span class="led led-breathe"></span>
-        </div>
-        <div class="flow">
-          <span class="term">answer</span>
-          <span class="led led-ring"></span>
-          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
-          <span class="led led-breathe"></span>
-        </div>
-        <div class="flow">
-          <span class="term">hang up</span>
-          <span class="led led-breathe"></span>
-          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press twice"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
-          <span class="led led-glow"></span>
-        </div>
-        <div class="flow">
-          <span class="term">cancel</span>
-          <span class="led led-dial"></span>
-          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press twice"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
-          <span class="led led-glow"></span>
-        </div>
-        <div class="flow">
-          <span class="term">mute</span>
-          <span class="led led-breathe"></span>
-          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
-          <span class="led led-muted"></span>
-          <span class="arr"><svg class="key" width="18" height="18" viewBox="0 0 24 24" aria-label="press"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="2.6"></circle></svg> →</span>
-          <span class="led led-breathe"></span>
-        </div>
-        <div class="flow">
-          <span class="term">busy</span>
-          <span class="led led-dial"></span>
-          <span class="arr">peer busy →</span>
-          <span class="led led-busy"></span>
-          <span class="arr">→</span>
-          <span class="led led-glow"></span>
-        </div>
-        <div class="flow">
-          <span class="term">missed</span>
-          <span class="led led-ring"></span>
-          <span class="arr">no answer →</span>
-          <span class="led led-missed"></span>
-          <span class="arr">→</span>
-          <span class="led led-glow"></span>
         </div>
       </div>
     </section>
