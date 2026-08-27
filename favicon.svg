@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90">
+  <!-- singlet: spin-1/2 pair as harpoons, up gold / down muted -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="10">
+    <g stroke="#d7c49a">
+      <line x1="33" y1="20" x2="33" y2="70"/>
+      <path d="M33 19 L47 34"/>
+    </g>
+    <g stroke="#9aa08c">
+      <line x1="57" y1="20" x2="57" y2="70"/>
+      <path d="M57 71 L43 56"/>
+    </g>
+  </g>
+</svg>

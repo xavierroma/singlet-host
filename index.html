@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>singlet</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <style>
     :root {
       color-scheme: dark;
@@ -36,6 +37,9 @@
       padding: 2.5rem 0;
     }
     h1 {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
       margin: 0 0 2rem;
       font-size: 1rem;
       font-weight: 600;
@@ -43,6 +47,7 @@
       text-transform: uppercase;
       color: var(--muted);
     }
+    h1 .mark { filter: drop-shadow(0 0 5px rgba(215, 196, 154, 0.45)); }
     .block { margin: 0 0 1.25rem; }
     .block:last-of-type { margin-bottom: 0; }
     h2 {
@@ -217,7 +222,7 @@
 </head>
 <body>
   <main>
-    <h1>singlet</h1>
+    <h1><svg class="mark" width="20" height="20" viewBox="0 0 90 90" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"><g stroke="#d7c49a"><line x1="34" y1="20" x2="34" y2="70"/><path d="M34 19 L46 32"/></g><g stroke="#9aa08c"><line x1="56" y1="20" x2="56" y2="70"/><path d="M56 71 L44 58"/></g></g></svg>singlet</h1>
 
     <section class="block" aria-labelledby="install-label">
       <h2 id="install-label">Install</h2>
